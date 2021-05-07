@@ -5,7 +5,7 @@ import com.delivey.di.notificacao.Notificador;
 
 public class AtivacaoClienteService {
 
-    private final Notificador notificador;
+    private Notificador notificador;
 
     public AtivacaoClienteService(Notificador notificador) {
         this.notificador = notificador;

@@ -6,7 +6,7 @@ import com.delivey.di.notificacao.Notificador;
 
 public class EmissaoNotaFiscalService {
 
-    private Notificador notificador;
+    private final Notificador notificador;
 
     public EmissaoNotaFiscalService(Notificador notificador) {
         this.notificador = notificador;
