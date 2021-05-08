@@ -6,12 +6,12 @@ import com.delivey.di.notificacao.Notificador;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static com.delivey.di.anotacao.NivelUrgencia.URGENTE;
+import static com.delivey.di.anotacao.NivelUrgencia.NORMAL;
 
 @Service
 public class AtivacaoClienteService {
 
-    @TipoDoNotificador(URGENTE)
+    @TipoDoNotificador(NORMAL)
     @Autowired
     private Notificador notificador;
 
