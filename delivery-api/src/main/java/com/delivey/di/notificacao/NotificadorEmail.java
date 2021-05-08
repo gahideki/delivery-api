@@ -1,10 +1,11 @@
 package com.delivey.di.notificacao;
 
 import com.delivey.di.model.Cliente;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
-@Primary
+@Qualifier("normal")
 @Component
 public class NotificadorEmail implements Notificador {
 
