@@ -1,10 +1,12 @@
 package com.delivey.di.notificacao;
 
+import com.delivey.di.anotacao.TipoDoNotificador;
 import com.delivey.di.model.Cliente;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-@Qualifier("urgente")
+import static com.delivey.di.anotacao.NivelUrgencia.URGENTE;
+
+@TipoDoNotificador(URGENTE)
 @Component
 public class NotificadorSMS implements Notificador {
 

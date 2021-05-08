@@ -1,17 +1,17 @@
 package com.delivey.di.service;
 
+import com.delivey.di.anotacao.TipoDoNotificador;
 import com.delivey.di.model.Cliente;
 import com.delivey.di.notificacao.Notificador;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import static com.delivey.di.anotacao.NivelUrgencia.URGENTE;
 
 @Service
 public class AtivacaoClienteService {
 
-    @Qualifier("normal")
+    @TipoDoNotificador(URGENTE)
     @Autowired
     private Notificador notificador;
 
