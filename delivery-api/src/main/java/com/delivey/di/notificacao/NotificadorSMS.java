@@ -2,6 +2,7 @@ package com.delivey.di.notificacao;
 
 import com.delivey.di.anotacao.TipoDoNotificador;
 import com.delivey.di.model.Cliente;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import static com.delivey.di.anotacao.NivelUrgencia.URGENTE;
