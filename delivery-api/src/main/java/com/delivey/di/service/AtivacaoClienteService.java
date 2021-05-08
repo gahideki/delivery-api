@@ -11,11 +11,11 @@ import java.util.List;
 public class AtivacaoClienteService {
 
     @Autowired
-    private List<Notificador> notificador;
+    private Notificador notificador;
 
     public void ativar(Cliente cliente) {
         cliente.ativar();
-        notificador.forEach(n-> n.notificar(cliente, "Cliente ativo com sucesso!"));
+        notificador.notificar(cliente, "Cliente ativo com sucesso!");
     }
 
 }
