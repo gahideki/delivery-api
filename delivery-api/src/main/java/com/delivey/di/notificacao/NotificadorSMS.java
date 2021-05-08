@@ -1,7 +1,9 @@
 package com.delivey.di.notificacao;
 
 import com.delivey.di.model.Cliente;
+import org.springframework.stereotype.Component;
 
+@Component
 public class NotificadorSMS implements Notificador {
 
     @Override
