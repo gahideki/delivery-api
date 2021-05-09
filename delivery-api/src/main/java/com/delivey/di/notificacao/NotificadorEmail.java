@@ -13,10 +13,10 @@ import static com.delivey.di.anotacao.NivelUrgencia.NORMAL;
 @Component
 public class NotificadorEmail implements Notificador {
 
-    @Value("${notificador.email.host-servidor}")
+    @Value("${notificador.email.host}")
     private String host;
 
-    @Value("${notificador.email.porta-servidor}")
+    @Value("${notificador.email.porta}")
     private Integer porta;
 
     @Override
