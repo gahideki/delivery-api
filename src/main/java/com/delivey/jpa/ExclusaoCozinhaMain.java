@@ -8,7 +8,7 @@ import org.springframework.context.ApplicationContext;
 
 import java.util.List;
 
-public class InclusaoCozinhaMain {
+public class ExclusaoCozinhaMain {
 
     public static void main(String[] args) {
         ApplicationContext applicationContext = new SpringApplicationBuilder(DeliveryApiApplication.class)
@@ -16,12 +16,10 @@ public class InclusaoCozinhaMain {
                                                     .run(args);
 
         CadastroCozinha cadastroCozinha = applicationContext.getBean(CadastroCozinha.class);
-        Cozinha cozinha = new Cozinha();
-        cozinha.setNome("Brasileira");
-        cozinha = cadastroCozinha.salvar(cozinha);
-
+        cadastroCozinha.remover(1L);
         List<Cozinha> cozinhas = cadastroCozinha.listar();
-        cozinhas.forEach(c -> System.out.println(c.getNome()));
+        cozinhas.forEach(cozinha -> System.out.println(cozinha.getNome()));
     }
+
 
 }
