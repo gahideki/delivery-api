@@ -6,7 +6,9 @@ import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
 
-public class BuscaCozinhaMain {
+import java.util.List;
+
+public class AlteracaoCozinhaMain {
 
     public static void main(String[] args) {
         ApplicationContext applicationContext = new SpringApplicationBuilder(DeliveryApiApplication.class)
@@ -14,9 +16,13 @@ public class BuscaCozinhaMain {
                                                     .run(args);
 
         CadastroCozinha cadastroCozinha = applicationContext.getBean(CadastroCozinha.class);
-        Cozinha cozinha = cadastroCozinha.buscarPor(1L);
-        System.out.println(cozinha.getNome());
-    }
+        Cozinha cozinha = new Cozinha();
+        cozinha.setId(1L);
+        cozinha.setNome("Brasileira");
+        cozinha = cadastroCozinha.salvar(cozinha);
 
+        List<Cozinha> cozinhas = cadastroCozinha.listar();
+        cozinhas.forEach(c -> System.out.println(c.getNome()));
+    }
 
 }
