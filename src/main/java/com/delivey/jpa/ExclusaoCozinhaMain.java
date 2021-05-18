@@ -2,6 +2,7 @@ package com.delivey.jpa;
 
 import com.delivey.DeliveryApiApplication;
 import com.delivey.domain.model.Cozinha;
+import com.delivey.domain.repository.CozinhaRepository;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
@@ -15,9 +16,9 @@ public class ExclusaoCozinhaMain {
                                                     .web(WebApplicationType.NONE)
                                                     .run(args);
 
-        CadastroCozinha cadastroCozinha = applicationContext.getBean(CadastroCozinha.class);
-        cadastroCozinha.remover(1L);
-        List<Cozinha> cozinhas = cadastroCozinha.listar();
+        CozinhaRepository cozinhaRepository = applicationContext.getBean(CozinhaRepository.class);
+        cozinhaRepository.remover(1L);
+        List<Cozinha> cozinhas = cozinhaRepository.listar();
         cozinhas.forEach(cozinha -> System.out.println(cozinha.getNome()));
     }
 
