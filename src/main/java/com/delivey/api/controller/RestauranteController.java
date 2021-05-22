@@ -31,14 +31,13 @@ public class RestauranteController {
         return ObjectUtils.isEmpty(restaurante) ? ResponseEntity.notFound().build() : ResponseEntity.ok(restaurante);
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public ResponseEntity<Restaurante> adicionar(@RequestBody Restaurante restaurante) {
+    public ResponseEntity<?> adicionar(@RequestBody Restaurante restaurante) {
         try {
             restaurante = restauranteService.salvar(restaurante);
-            return ResponseEntity.ok(restaurante);
+            return ResponseEntity.status(HttpStatus.CREATED).body(restaurante);
         } catch (EntidadeNaoEncontradaException ex) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().body(ex.getMessage());
         }
     }
 
