@@ -1,7 +1,6 @@
 package com.delivey.domain.repository;
 
 import com.delivey.domain.model.Cozinha;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
