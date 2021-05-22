@@ -1,6 +1,5 @@
 package com.delivey.api.controller;
 
-import com.delivey.domain.exception.EntidadeEmUsoException;
 import com.delivey.domain.exception.EntidadeNaoEncontradaException;
 import com.delivey.domain.model.Restaurante;
 import com.delivey.domain.service.RestauranteService;
@@ -42,12 +41,14 @@ public class RestauranteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Restaurante> atualizar(@PathVariable Long id, @RequestBody Restaurante restauranteInput) {
+    public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody Restaurante restauranteInput) {
         try {
             Restaurante restaurante = restauranteService.buscarPor(id);
             BeanUtils.copyProperties(restauranteInput, restaurante, "id");
             return ResponseEntity.ok(restauranteService.salvar(restaurante));
         } catch (EntidadeNaoEncontradaException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        } catch (IllegalArgumentException ex) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -59,8 +60,6 @@ public class RestauranteController {
             return ResponseEntity.noContent().build();
         } catch (EntidadeNaoEncontradaException ex) {
             return ResponseEntity.notFound().build();
-        } catch (EntidadeEmUsoException ex) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }
 
