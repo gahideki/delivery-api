@@ -1,12 +1,13 @@
 package com.delivey.api.controller;
 
 import com.delivey.domain.model.Cozinha;
-import com.delivey.domain.repository.CozinhaRepository;
+import com.delivey.domain.service.CozinhaService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,44 +17,40 @@ import java.util.List;
 public class CozinhaController {
 
     @Autowired
-    private CozinhaRepository repository;
+    private CozinhaService cozinhaService;
 
     @GetMapping
     public List<Cozinha> listar() {
-        return repository.listar();
+        return cozinhaService.listar();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Cozinha> buscar(@PathVariable Long id) {
-        Cozinha cozinha = repository.buscarPor(id);
-
-        if (cozinha == null)
-            return ResponseEntity.notFound().build();
-
-        return ResponseEntity.ok(cozinha);
+        Cozinha cozinha = cozinhaService.buscarPor(id);
+        return ObjectUtils.isEmpty(cozinha) ? ResponseEntity.notFound().build() : ResponseEntity.ok(cozinha);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public Cozinha adicionar(@RequestBody Cozinha cozinha) {
-        return repository.salvar(cozinha);
+        return cozinhaService.salvar(cozinha);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Cozinha> atualizar(@PathVariable Long id, @RequestBody Cozinha cozinhaInput) {
-        Cozinha cozinha = repository.buscarPor(id);
+        Cozinha cozinha = cozinhaService.buscarPor(id);
 
-        if (cozinha == null)
+        if (ObjectUtils.isEmpty(cozinha))
             return ResponseEntity.notFound().build();
 
         BeanUtils.copyProperties(cozinhaInput, cozinha, "id");
-        return ResponseEntity.ok(repository.salvar(cozinha));
+        return ResponseEntity.ok(cozinhaService.salvar(cozinha));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluir(@PathVariable Long id) {
         try {
-            repository.remover(id);
+            cozinhaService.remover(id);
             return ResponseEntity.noContent().build();
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.notFound().build();
