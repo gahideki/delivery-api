@@ -29,17 +29,18 @@ public class CozinhaRepositoryImpl implements CozinhaRepository {
     }
 
     public Cozinha buscarPor(Long id) {
-        return manager.find(Cozinha.class, id);
+        Cozinha cozinha = manager.find(Cozinha.class, id);
+
+        if (ObjectUtils.isEmpty(cozinha))
+            throw new EmptyResultDataAccessException(1);
+
+        return cozinha;
     }
 
     @Override
     @Transactional
     public void remover(Long id) {
         Cozinha cozinha = buscarPor(id);
-
-        if(ObjectUtils.isEmpty(cozinha))
-            throw new EmptyResultDataAccessException(1);
-
         manager.remove(cozinha);
     }
 
