@@ -2,8 +2,10 @@ package com.delivey.infra.repository;
 
 import com.delivey.domain.model.Cozinha;
 import com.delivey.domain.repository.CozinhaRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -34,6 +36,10 @@ public class CozinhaRepositoryImpl implements CozinhaRepository {
     @Transactional
     public void remover(Long id) {
         Cozinha cozinha = buscarPor(id);
+
+        if(ObjectUtils.isEmpty(cozinha))
+            throw new EmptyResultDataAccessException(1);
+
         manager.remove(cozinha);
     }
 

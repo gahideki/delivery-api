@@ -1,8 +1,12 @@
 package com.delivey.domain.service;
 
+import com.delivey.domain.exception.EntidadeEmUsoException;
+import com.delivey.domain.exception.EntidadeNaoEncontradaException;
 import com.delivey.domain.model.Cozinha;
 import com.delivey.domain.repository.CozinhaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,7 +30,13 @@ public class CozinhaService {
     }
 
     public void remover(Long id) {
-        cozinhaRepository.remover(id);
+        try {
+            cozinhaRepository.remover(id);
+        } catch (EmptyResultDataAccessException ex) {
+            throw new EntidadeNaoEncontradaException(String.format("Cozinha de código %d não foi encontrada", id));
+        } catch (DataIntegrityViolationException ex) {
+            throw new EntidadeEmUsoException(String.format("Cozinha de código %d não pode ser removida, pois está em uso", id));
+        }
     }
 
 }
