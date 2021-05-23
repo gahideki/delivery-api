@@ -1,11 +1,15 @@
 package com.delivey.api.controller;
 
+import com.delivey.domain.exception.EntidadeEmUsoException;
+import com.delivey.domain.exception.EntidadeNaoEncontradaException;
 import com.delivey.domain.model.Estado;
-import com.delivey.domain.repository.EstadoRepository;
+import com.delivey.domain.service.EstadoService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -14,11 +18,46 @@ import java.util.List;
 public class EstadoController {
 
     @Autowired
-    private EstadoRepository repository;
+    private EstadoService estadoService;
 
     @GetMapping
     public List<Estado> listar() {
-        return repository.listar();
+        return estadoService.listar();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Estado> buscar(@PathVariable Long id) {
+        Estado estado = estadoService.buscarPor(id);
+        return ObjectUtils.isEmpty(estado) ? ResponseEntity.notFound().build() : ResponseEntity.ok(estado);
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping
+    public Estado adicionar(@RequestBody Estado estado) {
+        return estadoService.salvar(estado);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Estado> atualizar(@PathVariable Long id, @RequestBody Estado estadoInput) {
+        Estado estado = estadoService.buscarPor(id);
+
+        if (ObjectUtils.isEmpty(estado))
+            return ResponseEntity.notFound().build();
+
+        BeanUtils.copyProperties(estadoInput, estado, "id");
+        return ResponseEntity.ok(estadoService.salvar(estado));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluir(@PathVariable Long id) {
+        try {
+            estadoService.remover(id);
+            return ResponseEntity.noContent().build();
+        } catch (EntidadeNaoEncontradaException ex) {
+            return ResponseEntity.notFound().build();
+        } catch (EntidadeEmUsoException ex) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
     }
 
 }

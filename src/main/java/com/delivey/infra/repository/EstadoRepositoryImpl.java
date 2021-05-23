@@ -2,8 +2,10 @@ package com.delivey.infra.repository;
 
 import com.delivey.domain.model.Estado;
 import com.delivey.domain.repository.EstadoRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,7 +29,12 @@ public class EstadoRepositoryImpl implements EstadoRepository {
     }
 
     public Estado buscarPor(Long id) {
-        return manager.find(Estado.class, id);
+        Estado estado = manager.find(Estado.class, id);
+
+        if (ObjectUtils.isEmpty(estado))
+            throw new EmptyResultDataAccessException(1);
+
+        return estado;
     }
 
     @Override

@@ -2,8 +2,10 @@ package com.delivey.infra.repository;
 
 import com.delivey.domain.model.Cidade;
 import com.delivey.domain.repository.CidadeRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,7 +29,12 @@ public class CidadeRepositoryImpl implements CidadeRepository {
     }
 
     public Cidade buscarPor(Long id) {
-        return manager.find(Cidade.class, id);
+        Cidade cidade = manager.find(Cidade.class, id);
+
+        if (ObjectUtils.isEmpty(cidade))
+            throw new EmptyResultDataAccessException(1);
+
+        return cidade;
     }
 
     @Override
