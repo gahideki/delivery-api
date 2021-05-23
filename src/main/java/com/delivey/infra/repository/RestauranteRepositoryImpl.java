@@ -2,8 +2,10 @@ package com.delivey.infra.repository;
 
 import com.delivey.domain.model.Restaurante;
 import com.delivey.domain.repository.RestauranteRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,7 +29,12 @@ public class RestauranteRepositoryImpl implements RestauranteRepository {
     }
 
     public Restaurante buscarPor(Long id) {
-        return manager.find(Restaurante.class, id);
+        Restaurante restaurante = manager.find(Restaurante.class, id);
+
+        if (ObjectUtils.isEmpty(restaurante))
+            throw new EmptyResultDataAccessException(1);
+
+        return restaurante;
     }
 
     @Override

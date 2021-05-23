@@ -1,7 +1,7 @@
 package com.delivey.infra.repository;
 
-import com.delivey.domain.model.Cozinha;
-import com.delivey.domain.repository.CozinhaRepository;
+import com.delivey.domain.model.Cidade;
+import com.delivey.domain.repository.CidadeRepository;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,36 +12,36 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Component
-public class CozinhaRepositoryImpl implements CozinhaRepository {
+public class CidadeRepositoryImpl implements CidadeRepository {
 
     @PersistenceContext
     private EntityManager manager;
 
     @Override
-    public List<Cozinha> listar() {
-        return manager.createQuery("from Cozinha", Cozinha.class).getResultList();
+    public List<Cidade> listar() {
+        return manager.createQuery("from Cidade", Cidade.class).getResultList();
     }
 
     @Override
     @Transactional
-    public Cozinha salvar(Cozinha cozinha) {
-        return manager.merge(cozinha);
+    public Cidade salvar(Cidade cidade) {
+        return manager.merge(cidade);
     }
 
-    public Cozinha buscarPor(Long id) {
-        Cozinha cozinha = manager.find(Cozinha.class, id);
+    public Cidade buscarPor(Long id) {
+        Cidade cidade = manager.find(Cidade.class, id);
 
-        if (ObjectUtils.isEmpty(cozinha))
+        if (ObjectUtils.isEmpty(cidade))
             throw new EmptyResultDataAccessException(1);
 
-        return cozinha;
+        return cidade;
     }
 
     @Override
     @Transactional
     public void remover(Long id) {
-        Cozinha cozinha = buscarPor(id);
-        manager.remove(cozinha);
+        Cidade cidade = buscarPor(id);
+        manager.remove(cidade);
     }
 
 }
