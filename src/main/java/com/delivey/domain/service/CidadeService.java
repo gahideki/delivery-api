@@ -39,7 +39,7 @@ public class CidadeService {
         try {
             return cidadeRepository.buscarPor(id);
         } catch (EmptyResultDataAccessException ex) {
-            throw new IllegalArgumentException(String.format("Cidade de código %d não foi encontrado", id));
+            throw new EntidadeNaoEncontradaException(String.format("Cidade de código %d não foi encontrado", id));
         }
     }
 

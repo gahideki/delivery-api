@@ -27,8 +27,12 @@ public class CozinhaController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Cozinha> buscar(@PathVariable Long id) {
-        Cozinha cozinha = cozinhaService.buscarPor(id);
-        return ObjectUtils.isEmpty(cozinha) ? ResponseEntity.notFound().build() : ResponseEntity.ok(cozinha);
+        try {
+            Cozinha cozinha = cozinhaService.buscarPor(id);
+            return ResponseEntity.ok(cozinha);
+        } catch (EntidadeNaoEncontradaException ex) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @ResponseStatus(HttpStatus.CREATED)

@@ -7,7 +7,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,8 +25,12 @@ public class CidadeController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Cidade> buscar(@PathVariable Long id) {
-        Cidade cidade = cidadeService.buscarPor(id);
-        return ObjectUtils.isEmpty(cidade) ? ResponseEntity.notFound().build() : ResponseEntity.ok(cidade);
+        try {
+            Cidade cidade = cidadeService.buscarPor(id);
+            return ResponseEntity.ok(cidade);
+        } catch (EntidadeNaoEncontradaException ex) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping

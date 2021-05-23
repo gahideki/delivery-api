@@ -39,7 +39,7 @@ public class RestauranteService {
         try {
             return restauranteRepository.buscarPor(id);
         } catch (EmptyResultDataAccessException ex) {
-            throw new IllegalArgumentException(String.format("Restaurante de código %d não foi encontrado", id));
+            throw new EntidadeNaoEncontradaException(String.format("Restaurante de código %d não foi encontrado", id));
         }
     }
 

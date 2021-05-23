@@ -26,7 +26,11 @@ public class EstadoService {
     }
 
     public Estado buscarPor(Long id) {
-        return estadoRepository.buscarPor(id);
+        try {
+            return estadoRepository.buscarPor(id);
+        } catch (EmptyResultDataAccessException ex) {
+            throw new EntidadeNaoEncontradaException(String.format("Estado de código %d não foi encontrado", id));
+        }
     }
 
     public void remover(Long id) {

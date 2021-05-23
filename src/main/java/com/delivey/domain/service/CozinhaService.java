@@ -26,7 +26,11 @@ public class CozinhaService {
     }
 
     public Cozinha buscarPor(Long id) {
-        return cozinhaRepository.buscarPor(id);
+        try {
+            return cozinhaRepository.buscarPor(id);
+        } catch (EmptyResultDataAccessException ex) {
+            throw new EntidadeNaoEncontradaException(String.format("Cozinha de código %d não foi encontrada", id));
+        }
     }
 
     public void remover(Long id) {

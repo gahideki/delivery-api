@@ -27,8 +27,12 @@ public class EstadoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Estado> buscar(@PathVariable Long id) {
-        Estado estado = estadoService.buscarPor(id);
-        return ObjectUtils.isEmpty(estado) ? ResponseEntity.notFound().build() : ResponseEntity.ok(estado);
+        try {
+            Estado estado = estadoService.buscarPor(id);
+            return ResponseEntity.ok(estado);
+        } catch (EntidadeNaoEncontradaException ex) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @ResponseStatus(HttpStatus.CREATED)

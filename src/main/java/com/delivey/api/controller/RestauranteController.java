@@ -8,7 +8,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,8 +27,12 @@ public class RestauranteController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Restaurante> buscar(@PathVariable Long id) {
-        Restaurante restaurante = restauranteService.buscarPor(id);
-        return ObjectUtils.isEmpty(restaurante) ? ResponseEntity.notFound().build() : ResponseEntity.ok(restaurante);
+        try {
+            Restaurante restaurante = restauranteService.buscarPor(id);
+            return ResponseEntity.ok(restaurante);
+        } catch (EntidadeNaoEncontradaException ex) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping
