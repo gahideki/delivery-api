@@ -3,6 +3,7 @@ package com.delivey.api.controller;
 import com.delivey.domain.exception.EntidadeNaoEncontradaException;
 import com.delivey.domain.model.Restaurante;
 import com.delivey.domain.service.RestauranteService;
+import com.delivey.utils.ObjectMerger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -68,15 +69,11 @@ public class RestauranteController {
     public ResponseEntity<?> atualizarParcial(@PathVariable Long id, @RequestBody Map<String, Object> campos) {
         try {
             Restaurante restaurante = restauranteService.buscarPor(id);
-            merge(campos, restaurante);
+            ObjectMerger.of(Restaurante.class).mergeRequestBodyToGenericObject(campos, restaurante);
             return atualizar(id, restaurante);
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.notFound().build();
         }
-    }
-
-    private void merge(Map<String, Object> campos, Restaurante restaurante) {
-
     }
 
 }
