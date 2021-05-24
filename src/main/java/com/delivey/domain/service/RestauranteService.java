@@ -26,13 +26,9 @@ public class RestauranteService {
 
     public Restaurante salvar(Restaurante restaurante) {
         Long cozinhaId = restaurante.getCozinha().getId();
-        try {
-            Cozinha cozinha = cozinhaRepository.buscarPor(cozinhaId);
-            restaurante.setCozinha(cozinha);
-            return restauranteRepository.salvar(restaurante);
-        } catch (EmptyResultDataAccessException ex) {
-            throw new EntidadeNaoEncontradaException(String.format("Cozinha de código %d não encontrada", cozinhaId));
-        }
+        Cozinha cozinha = cozinhaRepository.findById(cozinhaId).orElseThrow(() -> new EntidadeNaoEncontradaException(String.format("Cozinha de código %d não foi encontrada", cozinhaId)));
+        restaurante.setCozinha(cozinha);
+        return restauranteRepository.salvar(restaurante);
     }
 
     public Restaurante buscarPor(Long id) {

@@ -8,7 +8,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,13 +42,13 @@ public class CozinhaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Cozinha> atualizar(@PathVariable Long id, @RequestBody Cozinha cozinhaInput) {
-        Cozinha cozinha = cozinhaService.buscarPor(id);
-
-        if (ObjectUtils.isEmpty(cozinha))
+        try {
+            Cozinha cozinha = cozinhaService.buscarPor(id);
+            BeanUtils.copyProperties(cozinhaInput, cozinha, "id");
+            return ResponseEntity.ok(cozinhaService.salvar(cozinha));
+        } catch (EntidadeNaoEncontradaException ex) {
             return ResponseEntity.notFound().build();
-
-        BeanUtils.copyProperties(cozinhaInput, cozinha, "id");
-        return ResponseEntity.ok(cozinhaService.salvar(cozinha));
+        }
     }
 
     @DeleteMapping("/{id}")

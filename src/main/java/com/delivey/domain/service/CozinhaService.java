@@ -18,24 +18,20 @@ public class CozinhaService {
     private CozinhaRepository cozinhaRepository;
 
     public List<Cozinha> listar() {
-        return cozinhaRepository.listar();
+        return cozinhaRepository.findAll();
     }
 
     public Cozinha salvar(Cozinha cozinha) {
-        return cozinhaRepository.salvar(cozinha);
+        return cozinhaRepository.save(cozinha);
     }
 
     public Cozinha buscarPor(Long id) {
-        try {
-            return cozinhaRepository.buscarPor(id);
-        } catch (EmptyResultDataAccessException ex) {
-            throw new EntidadeNaoEncontradaException(String.format("Cozinha de código %d não foi encontrada", id));
-        }
+        return cozinhaRepository.findById(id).orElseThrow(() -> new EntidadeNaoEncontradaException(String.format("Cozinha de código %d não foi encontrada", id)));
     }
 
     public void remover(Long id) {
         try {
-            cozinhaRepository.remover(id);
+            cozinhaRepository.deleteById(id);
         } catch (EmptyResultDataAccessException ex) {
             throw new EntidadeNaoEncontradaException(String.format("Cozinha de código %d não foi encontrada", id));
         } catch (DataIntegrityViolationException ex) {

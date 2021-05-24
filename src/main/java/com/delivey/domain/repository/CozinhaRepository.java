@@ -1,16 +1,14 @@
 package com.delivey.domain.repository;
 
 import com.delivey.domain.model.Cozinha;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-//@Repository
-public interface CozinhaRepository {
+@Repository
+public interface CozinhaRepository extends JpaRepository<Cozinha, Long> {
 
-    List<Cozinha> listar();
-    List<Cozinha> consultarPorNome(String nome);
-    Cozinha salvar(Cozinha cozinha);
-    Cozinha buscarPor(Long id);
-    void remover(Long id);
+    List<Cozinha> findByNome(String nome);
 
 }

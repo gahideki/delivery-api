@@ -15,7 +15,7 @@ public class BuscaCozinhaMain {
                                                     .run(args);
 
         CozinhaRepository cozinhaRepository = applicationContext.getBean(CozinhaRepository.class);
-        Cozinha cozinha = cozinhaRepository.buscarPor(1L);
+        Cozinha cozinha = cozinhaRepository.findById(1L).get();
         System.out.println(cozinha.getNome());
     }
 
