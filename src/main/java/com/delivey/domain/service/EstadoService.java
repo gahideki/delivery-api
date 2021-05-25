@@ -18,24 +18,20 @@ public class EstadoService {
     private EstadoRepository estadoRepository;
 
     public List<Estado> listar() {
-        return estadoRepository.listar();
+        return estadoRepository.findAll();
     }
 
     public Estado salvar(Estado estado) {
-        return estadoRepository.salvar(estado);
+        return estadoRepository.save(estado);
     }
 
     public Estado buscarPor(Long id) {
-        try {
-            return estadoRepository.buscarPor(id);
-        } catch (EmptyResultDataAccessException ex) {
-            throw new EntidadeNaoEncontradaException(String.format("Estado de código %d não foi encontrado", id));
-        }
+        return estadoRepository.findById(id).orElseThrow(() -> new EntidadeNaoEncontradaException(String.format("Estado de código %d não foi encontrado", id)));
     }
 
     public void remover(Long id) {
         try {
-            estadoRepository.remover(id);
+            estadoRepository.deleteById(id);
         } catch (EmptyResultDataAccessException ex) {
             throw new EntidadeNaoEncontradaException(String.format("Estado de código %d não foi encontrado", id));
         } catch (DataIntegrityViolationException ex) {

@@ -21,31 +21,23 @@ public class CidadeService {
     private EstadoRepository estadoRepository;
 
     public List<Cidade> listar() {
-        return cidadeRepository.listar();
+        return cidadeRepository.findAll();
     }
 
     public Cidade salvar(Cidade cidade) {
         Long estadoId = cidade.getEstado().getId();
-        try {
-            Estado estado = estadoRepository.buscarPor(estadoId);
-            cidade.setEstado(estado);
-            return cidadeRepository.salvar(cidade);
-        } catch (EmptyResultDataAccessException ex) {
-            throw new EntidadeNaoEncontradaException(String.format("Estado de código %d não encontrado", estadoId));
-        }
+        Estado estado = estadoRepository.findById(estadoId).orElseThrow(() -> new EntidadeNaoEncontradaException(String.format("Estado de código %d não encontrado", estadoId)));
+        cidade.setEstado(estado);
+        return cidadeRepository.save(cidade);
     }
 
     public Cidade buscarPor(Long id) {
-        try {
-            return cidadeRepository.buscarPor(id);
-        } catch (EmptyResultDataAccessException ex) {
-            throw new EntidadeNaoEncontradaException(String.format("Cidade de código %d não foi encontrado", id));
-        }
+        return cidadeRepository.findById(id).orElseThrow(() -> new EntidadeNaoEncontradaException(String.format("Cidade de código %d não foi encontrado", id)));
     }
 
     public void remover(Long id) {
         try {
-            cidadeRepository.remover(id);
+            cidadeRepository.deleteById(id);
         } catch (EmptyResultDataAccessException ex) {
             throw new EntidadeNaoEncontradaException(String.format("Cidade de código %d não foi encontrado", id));
         }
