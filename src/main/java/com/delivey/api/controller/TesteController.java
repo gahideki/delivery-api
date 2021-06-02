@@ -64,4 +64,9 @@ public class TesteController {
         return restauranteRepository.countByCozinhaId(id);
     }
 
+    @GetMapping("/restaurantes/por-nome-e-taxa-frete")
+    public List<Restaurante> restaurantesPorNomeETaxaFrete(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal) {
+        return restauranteRepository.find(nome, taxaFreteInicial, taxaFreteFinal);
+    }
+
 }
