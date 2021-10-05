@@ -4,7 +4,7 @@ import com.delivey.domain.model.Cozinha;
 import com.delivey.domain.model.Restaurante;
 import com.delivey.domain.repository.CozinhaRepository;
 import com.delivey.domain.repository.RestauranteRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,58 +14,57 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/teste")
 public class TesteController {
 
-    @Autowired
-    private CozinhaRepository cozinhaRepository;
+    private final CozinhaRepository cozinhaRepository;
 
-    @Autowired
-    private RestauranteRepository restauranteRepository;
+    private final RestauranteRepository restauranteRepository;
 
-    @GetMapping("cozinhas/por-nome")
-    public List<Cozinha> buscarTodasPorNome(@RequestParam String nome) {
+    @GetMapping("/cozinhas/por-nome")
+    public List<Cozinha> buscarTodasPorNome(@RequestParam final String nome) {
         return cozinhaRepository.findQualquerCoisaByNomeContaining(nome);
     }
 
     @GetMapping("/cozinhas/unica-por-nome")
-    public Optional<Cozinha> buscarUnicaPorNome(String nome) {
-        return cozinhaRepository.findByNome(nome);
+    public Optional<Cozinha> buscarUnicaPorNome(@RequestParam final String nome) {
+        return cozinhaRepository.queryByNome(nome);
     }
 
     @GetMapping("/restaurantes/por-taxa-frete")
-    public List<Restaurante> restaurantesPorTaxaFrete(BigDecimal taxaInicial, BigDecimal taxaFinal) {
+    public List<Restaurante> restaurantesPorTaxaFrete(final BigDecimal taxaInicial, final BigDecimal taxaFinal) {
         return restauranteRepository.findByTaxaFreteBetween(taxaInicial, taxaFinal);
     }
 
     @GetMapping("/restaurantes/por-nome")
-    public List<Restaurante> restaurantesPorNomeECozinha(String nome, Long cozinhaId) {
+    public List<Restaurante> restaurantesPorNomeECozinha(final String nome, final Long cozinhaId) {
         return restauranteRepository.consultarPorNome(nome, cozinhaId);
     }
 
     @GetMapping("/restaurantes/primeiro-por-nome")
-    public Optional<Restaurante> restaurantePrimeiroPorNome(String nome) {
+    public Optional<Restaurante> restaurantePrimeiroPorNome(final String nome) {
         return restauranteRepository.findFirstRestauranteByNomeContaining(nome);
     }
 
     @GetMapping("/restaurantes/top2-por-nome")
-    public List<Restaurante> restaurantesTop2PorNome(String nome) {
+    public List<Restaurante> restaurantesTop2PorNome(final String nome) {
         return restauranteRepository.findTop2ByNomeContaining(nome);
     }
 
     @GetMapping("/cozinhas/exists")
-    public Boolean cozinhaExists(String nome) {
+    public Boolean cozinhaExists(final String nome) {
         return cozinhaRepository.existsCozinhaByNome(nome);
     }
 
     @GetMapping("/restaurantes/count-por-cozinha")
-    public Integer cozinhaCount(Long id) {
+    public Integer cozinhaCount(final Long id) {
         return restauranteRepository.countByCozinhaId(id);
     }
 
     @GetMapping("/restaurantes/por-nome-e-taxa-frete")
-    public List<Restaurante> restaurantesPorNomeETaxaFrete(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal) {
+    public List<Restaurante> restaurantesPorNomeETaxaFrete(final String nome, final BigDecimal taxaFreteInicial, final BigDecimal taxaFreteFinal) {
         return restauranteRepository.find(nome, taxaFreteInicial, taxaFreteFinal);
     }
 

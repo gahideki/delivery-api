@@ -13,10 +13,10 @@ import java.util.Optional;
 public interface RestauranteRepository extends JpaRepository<Restaurante, Long>, RestauranteRepositoryQueries {
 
     List<Restaurante> findByTaxaFreteBetween(BigDecimal taxaInicial, BigDecimal taxaFinal);
-    List<Restaurante> findByNomeContainingAndCozinhaId(String nome, Long cozinha);
     Optional<Restaurante> findFirstRestauranteByNomeContaining(String nome);
     List<Restaurante> findTop2ByNomeContaining(String nome);
     Integer countByCozinhaId(Long cozinhaId);
+    // List<Restaurante> findByNomeContainingAndCozinhaId(String nome, Long cozinha);
     List<Restaurante> consultarPorNome(String nome, @Param("id") Long cozinhaId);
 
 }

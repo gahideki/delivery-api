@@ -4,8 +4,8 @@ import com.delivey.domain.exception.EntidadeNaoEncontradaException;
 import com.delivey.domain.model.Restaurante;
 import com.delivey.domain.service.RestauranteService;
 import com.delivey.utils.ObjectMerger;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/restaurantes")
 public class RestauranteController {
 
-    @Autowired
-    private RestauranteService restauranteService;
+    private final RestauranteService restauranteService;
 
     @GetMapping
     public List<Restaurante> listar() {
@@ -26,7 +26,7 @@ public class RestauranteController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Restaurante> buscar(@PathVariable Long id) {
+    public ResponseEntity<Restaurante> buscar(@PathVariable final Long id) {
         try {
             Restaurante restaurante = restauranteService.buscarPor(id);
             return ResponseEntity.ok(restaurante);
@@ -46,7 +46,7 @@ public class RestauranteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody Restaurante restauranteInput) {
+    public ResponseEntity<?> atualizar(@PathVariable final Long id, @RequestBody Restaurante restauranteInput) {
         try {
             Restaurante restaurante = restauranteService.buscarPor(id);
             BeanUtils.copyProperties(restauranteInput, restaurante, "id");
@@ -59,7 +59,7 @@ public class RestauranteController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluir(@PathVariable Long id) {
+    public ResponseEntity<Void> excluir(@PathVariable final Long id) {
         try {
             restauranteService.remover(id);
             return ResponseEntity.noContent().build();
@@ -69,7 +69,7 @@ public class RestauranteController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> atualizarParcial(@PathVariable Long id, @RequestBody Map<String, Object> campos) {
+    public ResponseEntity<?> atualizarParcial(@PathVariable final Long id, @RequestBody Map<String, Object> campos) {
         try {
             Restaurante restaurante = restauranteService.buscarPor(id);
             ObjectMerger.of(Restaurante.class).mergeRequestBodyToGenericObject(campos, restaurante);

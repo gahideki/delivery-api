@@ -4,20 +4,20 @@ import com.delivey.domain.exception.EntidadeEmUsoException;
 import com.delivey.domain.exception.EntidadeNaoEncontradaException;
 import com.delivey.domain.model.Cozinha;
 import com.delivey.domain.service.CozinhaService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/cozinhas")
 public class CozinhaController {
 
-    @Autowired
-    private CozinhaService cozinhaService;
+    private final CozinhaService cozinhaService;
 
     @GetMapping
     public List<Cozinha> listar() {
@@ -25,7 +25,7 @@ public class CozinhaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cozinha> buscar(@PathVariable Long id) {
+    public ResponseEntity<Cozinha> buscar(@PathVariable final Long id) {
         try {
             Cozinha cozinha = cozinhaService.buscarPor(id);
             return ResponseEntity.ok(cozinha);
@@ -41,7 +41,7 @@ public class CozinhaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Cozinha> atualizar(@PathVariable Long id, @RequestBody Cozinha cozinhaInput) {
+    public ResponseEntity<Cozinha> atualizar(@PathVariable final Long id, @RequestBody Cozinha cozinhaInput) {
         try {
             Cozinha cozinha = cozinhaService.buscarPor(id);
             BeanUtils.copyProperties(cozinhaInput, cozinha, "id");
@@ -52,7 +52,7 @@ public class CozinhaController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluir(@PathVariable Long id) {
+    public ResponseEntity<Void> excluir(@PathVariable final Long id) {
         try {
             cozinhaService.remover(id);
             return ResponseEntity.noContent().build();

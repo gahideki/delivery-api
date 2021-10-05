@@ -4,8 +4,8 @@ import com.delivey.domain.exception.EntidadeEmUsoException;
 import com.delivey.domain.exception.EntidadeNaoEncontradaException;
 import com.delivey.domain.model.Estado;
 import com.delivey.domain.service.EstadoService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/estados")
 public class EstadoController {
 
-    @Autowired
-    private EstadoService estadoService;
+    private final EstadoService estadoService;
 
     @GetMapping
     public List<Estado> listar() {
@@ -26,7 +26,7 @@ public class EstadoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Estado> buscar(@PathVariable Long id) {
+    public ResponseEntity<Estado> buscar(@PathVariable final Long id) {
         try {
             Estado estado = estadoService.buscarPor(id);
             return ResponseEntity.ok(estado);
@@ -42,7 +42,7 @@ public class EstadoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Estado> atualizar(@PathVariable Long id, @RequestBody Estado estadoInput) {
+    public ResponseEntity<Estado> atualizar(@PathVariable final Long id, @RequestBody Estado estadoInput) {
         Estado estado = estadoService.buscarPor(id);
 
         if (ObjectUtils.isEmpty(estado))
@@ -53,7 +53,7 @@ public class EstadoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluir(@PathVariable Long id) {
+    public ResponseEntity<Void> excluir(@PathVariable final Long id) {
         try {
             estadoService.remover(id);
             return ResponseEntity.noContent().build();
