@@ -14,6 +14,9 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
+import static com.delivey.domain.repository.spec.RestauranteSpecs.comFreteGratis;
+import static com.delivey.domain.repository.spec.RestauranteSpecs.comNomeSemelhante;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/teste")
@@ -70,10 +73,7 @@ public class TesteController {
 
     @GetMapping("/restaurantes/com-frete-gratis")
     public List<Restaurante> restaurantesComFreteGratis(final String nome) {
-        // var comFreteGratis = new RestauranteComFreteGratisSpec();
-        // var comNomeSemelhante = new RestauranteComNomeSemelhanteSpec(nome);
-        // return restauranteRepository.findAll(comFreteGratis.and(comNomeSemelhante));
-        return null;
+        return restauranteRepository.findAll(comFreteGratis().and(comNomeSemelhante(nome)));
     }
 
 }
