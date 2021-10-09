@@ -21,31 +21,23 @@ public class RestauranteService {
     private CozinhaRepository cozinhaRepository;
 
     public List<Restaurante> listar() {
-        return restauranteRepository.listar();
+        return restauranteRepository.findAll();
     }
 
     public Restaurante salvar(Restaurante restaurante) {
         Long cozinhaId = restaurante.getCozinha().getId();
-        try {
-            Cozinha cozinha = cozinhaRepository.buscarPor(cozinhaId);
-            restaurante.setCozinha(cozinha);
-            return restauranteRepository.salvar(restaurante);
-        } catch (EmptyResultDataAccessException ex) {
-            throw new EntidadeNaoEncontradaException(String.format("Cozinha de código %d não encontrada", cozinhaId));
-        }
+        Cozinha cozinha = cozinhaRepository.findById(cozinhaId).orElseThrow(() -> new EntidadeNaoEncontradaException(String.format("Cozinha de código %d não foi encontrada", cozinhaId)));
+        restaurante.setCozinha(cozinha);
+        return restauranteRepository.save(restaurante);
     }
 
     public Restaurante buscarPor(Long id) {
-        try {
-            return restauranteRepository.buscarPor(id);
-        } catch (EmptyResultDataAccessException ex) {
-            throw new IllegalArgumentException(String.format("Restaurante de código %d não foi encontrado", id));
-        }
+        return restauranteRepository.findById(id).orElseThrow(() -> new EntidadeNaoEncontradaException(String.format("Restaurante de código %d não foi encontrado", id)));
     }
 
     public void remover(Long id) {
         try {
-            restauranteRepository.remover(id);
+            restauranteRepository.deleteById(id);
         } catch (EmptyResultDataAccessException ex) {
             throw new EntidadeNaoEncontradaException(String.format("Restaurante de código %d não foi encontrado", id));
         }

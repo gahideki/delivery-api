@@ -3,21 +3,20 @@ package com.delivey.api.controller;
 import com.delivey.domain.exception.EntidadeNaoEncontradaException;
 import com.delivey.domain.model.Cidade;
 import com.delivey.domain.service.CidadeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/cidades")
 public class CidadeController {
 
-    @Autowired
-    private CidadeService cidadeService;
+    private final CidadeService cidadeService;
 
     @GetMapping
     public List<Cidade> listar() {
@@ -25,9 +24,13 @@ public class CidadeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cidade> buscar(@PathVariable Long id) {
-        Cidade cidade = cidadeService.buscarPor(id);
-        return ObjectUtils.isEmpty(cidade) ? ResponseEntity.notFound().build() : ResponseEntity.ok(cidade);
+    public ResponseEntity<Cidade> buscar(@PathVariable final Long id) {
+        try {
+            Cidade cidade = cidadeService.buscarPor(id);
+            return ResponseEntity.ok(cidade);
+        } catch (EntidadeNaoEncontradaException ex) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping
@@ -41,7 +44,7 @@ public class CidadeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody Cidade cidadeInput) {
+    public ResponseEntity<?> atualizar(@PathVariable final Long id, @RequestBody Cidade cidadeInput) {
         try {
             Cidade cidade = cidadeService.buscarPor(id);
             BeanUtils.copyProperties(cidadeInput, cidade, "id");
@@ -54,7 +57,7 @@ public class CidadeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluir(@PathVariable Long id) {
+    public ResponseEntity<Void> excluir(@PathVariable final Long id) {
         try {
             cidadeService.remover(id);
             return ResponseEntity.noContent().build();

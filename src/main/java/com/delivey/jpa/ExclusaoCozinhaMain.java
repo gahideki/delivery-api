@@ -17,8 +17,8 @@ public class ExclusaoCozinhaMain {
                                                     .run(args);
 
         CozinhaRepository cozinhaRepository = applicationContext.getBean(CozinhaRepository.class);
-        cozinhaRepository.remover(1L);
-        List<Cozinha> cozinhas = cozinhaRepository.listar();
+        cozinhaRepository.deleteById(1L);
+        List<Cozinha> cozinhas = cozinhaRepository.findAll();
         cozinhas.forEach(cozinha -> System.out.println(cozinha.getNome()));
     }
 

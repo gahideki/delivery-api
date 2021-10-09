@@ -19,9 +19,9 @@ public class InclusaoCozinhaMain {
         CozinhaRepository cozinhaRepository = applicationContext.getBean(CozinhaRepository.class);
         Cozinha cozinha = new Cozinha();
         cozinha.setNome("Brasileira");
-        cozinha = cozinhaRepository.salvar(cozinha);
+        cozinha = cozinhaRepository.save(cozinha);
 
-        List<Cozinha> cozinhas = cozinhaRepository.listar();
+        List<Cozinha> cozinhas = cozinhaRepository.findAll();
         cozinhas.forEach(c -> System.out.println(c.getNome()));
     }
 
