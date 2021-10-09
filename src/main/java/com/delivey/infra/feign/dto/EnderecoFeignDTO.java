@@ -1,6 +1,8 @@
 package com.delivey.infra.feign.dto;
 
+import com.delivey.domain.model.Cidade;
 import com.delivey.domain.model.Endereco;
+import com.delivey.domain.model.Estado;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,14 +17,20 @@ public class EnderecoFeignDTO {
     private String localidade;
     private String uf;
 
-    private static Endereco convertToEnderecoEntity(EnderecoFeignDTO enderecoFeignDTO) {
+    public Endereco convertToEnderecoEntity() {
         var endereco = new Endereco();
-        endereco.setCep(enderecoFeignDTO.getCep());
-        endereco.setLogradouro(enderecoFeignDTO.getLogradouro());
-        endereco.setComplemento(enderecoFeignDTO.getComplemento());
-        endereco.setBairro(enderecoFeignDTO.getBairro());
-        endereco.getCidade().setNome(enderecoFeignDTO.getLocalidade());
-        endereco.getCidade().getEstado().setNome(enderecoFeignDTO.getUf());
+        var cidade = new Cidade();
+        var estado = new Estado();
+
+        cidade.setEstado(estado);
+        endereco.setCidade(cidade);
+
+        endereco.setCep(this.getCep());
+        endereco.setLogradouro(this.getLogradouro());
+        endereco.setComplemento(this.getComplemento());
+        endereco.setBairro(this.getBairro());
+        endereco.getCidade().setNome(this.getLocalidade());
+        endereco.getCidade().getEstado().setNome(this.getUf());
         return endereco;
     }
 

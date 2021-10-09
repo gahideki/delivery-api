@@ -20,7 +20,7 @@ public class Cidade {
     @Column(nullable = false)
     private String nome;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "estado_id", nullable = false)
     private Estado estado;
 

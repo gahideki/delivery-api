@@ -49,7 +49,7 @@ public class RestauranteController {
     public ResponseEntity<?> atualizar(@PathVariable final Long id, @RequestBody Restaurante restauranteInput) {
         try {
             Restaurante restaurante = restauranteService.buscarPor(id);
-            BeanUtils.copyProperties(restauranteInput, restaurante, "id", "formasDePagamentos");
+            BeanUtils.copyProperties(restauranteInput, restaurante, "id", "formasDePagamentos", "endereco");
             return ResponseEntity.ok(restauranteService.salvar(restaurante));
         } catch (EntidadeNaoEncontradaException ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());

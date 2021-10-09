@@ -1,17 +1,17 @@
-INSERT INTO cozinha (nome) VALUES ('Tailandesa');
-INSERT INTO cozinha (nome) VALUES ('Indiana');
+INSERT INTO cozinha (id, nome) VALUES (1, 'Tailandesa');
+INSERT INTO cozinha (id, nome) VALUES (2, 'Indiana');
 
-INSERT INTO restaurante (nome, taxa_frete, cozinha_id) VALUES ('Thai Gourmet', 10, 1);
-INSERT INTO restaurante (nome, taxa_frete, cozinha_id) VALUES ('Thai Delivery', 9.50, 2);
-INSERT INTO restaurante (nome, taxa_frete, cozinha_id) VALUES ('Tuk Tuk Comida Indiana', 15, 2);
+INSERT INTO estado (id, nome) VALUES (1, 'São Paulo');
+INSERT INTO estado (id, nome) VALUES (2, 'Rio de Janeiro');
+INSERT INTO estado (id, nome) VALUES (3, 'Minas Gerais');
 
-INSERT INTO estado (nome) VALUES ('São Paulo');
-INSERT INTO estado (nome) VALUES ('Rio de Janeiro');
-INSERT INTO estado (nome) VALUES ('Minas Gerais');
+INSERT INTO cidade (id, nome, estado_id) VALUES(1, 'Suzano', 1);
+INSERT INTO cidade (id, nome, estado_id) VALUES(2, 'Copacabana', 2);
+INSERT INTO cidade (id, nome, estado_id) VALUES(3, 'Belo Horizonte', 3);
 
-INSERT INTO cidade (nome, estado_id) VALUES('Suzano', 1);
-INSERT INTO cidade (nome, estado_id) VALUES('Copacabana', 2);
-INSERT INTO cidade (nome, estado_id) VALUES('Belo Horizonte', 3);
+INSERT INTO restaurante (id, nome, taxa_frete, cozinha_id, endereco_cidade_id, endereco_cep, endereco_logradouro, endereco_numero, endereco_bairro) VALUES (1, 'Thai Gourmet', 10, 1, 1, '38400-999', 'Rua João Pinheiro', '1000', 'Centro');
+INSERT INTO restaurante (id, nome, taxa_frete, cozinha_id) VALUES (2, 'Thai Delivery', 9.50, 2);
+INSERT INTO restaurante (id, nome, taxa_frete, cozinha_id) VALUES (3, 'Tuk Tuk Comida Indiana', 15, 2);
 
 INSERT INTO forma_pagamento (id, descricao) VALUES (1, 'Cartão de crédito');
 INSERT INTO forma_pagamento (id, descricao) VALUES (2, 'Cartão de débito');
