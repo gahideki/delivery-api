@@ -53,7 +53,7 @@ public class RestauranteController {
         try {
             Restaurante restaurante = restauranteService.buscarPor(id);
             getEnderecoViaCEP(restauranteInput);
-            BeanUtils.copyProperties(restauranteInput, restaurante, "id", "formasDePagamentos", "endereco", "dataCadastro");
+            BeanUtils.copyProperties(restauranteInput, restaurante, "id", "formasDePagamentos", "endereco", "dataCadastro", "produtos");
             return ResponseEntity.ok(restauranteService.salvar(restaurante));
         } catch (EntidadeNaoEncontradaException ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
