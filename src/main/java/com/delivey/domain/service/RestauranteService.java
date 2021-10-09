@@ -9,10 +9,8 @@ import com.delivey.domain.repository.RestauranteRepository;
 import com.delivey.infra.feign.EnderecoFeign;
 import com.delivey.infra.feign.dto.EnderecoFeignDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -33,12 +31,14 @@ public class RestauranteService {
     public Restaurante salvar(Restaurante restaurante) {
         Long cozinhaId = restaurante.getCozinha().getId();
         Cozinha cozinha = cozinhaRepository.findById(cozinhaId).orElseThrow(() -> new EntidadeNaoEncontradaException(String.format("Cozinha de código %d não foi encontrada", cozinhaId)));
+        restaurante.setCozinha(cozinha);
+        return restauranteRepository.save(restaurante);
+    }
+
+    public Endereco getEnderecoViaCEP(Restaurante restaurante) {
         EnderecoFeignDTO enderecoViaCEP = enderecoFeign.getEnderecoViaCEP(restaurante.getEndereco().getCep());
         Endereco endereco = enderecoViaCEP.convertToEnderecoEntity();
-
-        restaurante.setCozinha(cozinha);
-        restaurante.setEndereco(endereco);
-        return restauranteRepository.save(restaurante);
+        return endereco;
     }
 
     public Restaurante buscarPor(Long id) {
