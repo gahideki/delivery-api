@@ -2,6 +2,7 @@ package com.delivey.domain.repository;
 
 import com.delivey.domain.model.Restaurante;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -18,5 +19,8 @@ public interface RestauranteRepository extends CustomJpaRepository<Restaurante, 
     Integer countByCozinhaId(Long cozinhaId);
     // List<Restaurante> findByNomeContainingAndCozinhaId(String nome, Long cozinha);
     List<Restaurante> consultarPorNome(String nome, @Param("id") Long cozinhaId);
+
+    @Query("SELECT DISTINCT r FROM Restaurante r JOIN FETCH r.cozinha LEFT JOIN r.formasDePagamentos")
+    List<Restaurante> findAll();
 
 }

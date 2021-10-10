@@ -27,7 +27,7 @@ public class Endereco {
     @Column(name = "endereco_bairro")
     private String bairro;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "endereco_cidade_id")
     private Cidade cidade;
 
