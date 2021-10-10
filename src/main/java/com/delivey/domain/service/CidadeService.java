@@ -5,20 +5,19 @@ import com.delivey.domain.model.Cidade;
 import com.delivey.domain.model.Estado;
 import com.delivey.domain.repository.CidadeRepository;
 import com.delivey.domain.repository.EstadoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class CidadeService {
 
-    @Autowired
-    private CidadeRepository cidadeRepository;
+    private final CidadeRepository cidadeRepository;
 
-    @Autowired
-    private EstadoRepository estadoRepository;
+    private final EstadoRepository estadoRepository;
 
     public List<Cidade> listar() {
         return cidadeRepository.findAll();

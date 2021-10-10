@@ -2,23 +2,27 @@ package com.delivey.domain.service;
 
 import com.delivey.domain.exception.EntidadeNaoEncontradaException;
 import com.delivey.domain.model.Cozinha;
+import com.delivey.domain.model.Endereco;
 import com.delivey.domain.model.Restaurante;
 import com.delivey.domain.repository.CozinhaRepository;
 import com.delivey.domain.repository.RestauranteRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.delivey.infra.feign.EnderecoFeign;
+import com.delivey.infra.feign.dto.EnderecoFeignDTO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class RestauranteService {
 
-    @Autowired
-    private RestauranteRepository restauranteRepository;
+    private final RestauranteRepository restauranteRepository;
 
-    @Autowired
-    private CozinhaRepository cozinhaRepository;
+    private final CozinhaRepository cozinhaRepository;
+
+    private final EnderecoFeign enderecoFeign;
 
     public List<Restaurante> listar() {
         return restauranteRepository.findAll();
@@ -29,6 +33,12 @@ public class RestauranteService {
         Cozinha cozinha = cozinhaRepository.findById(cozinhaId).orElseThrow(() -> new EntidadeNaoEncontradaException(String.format("Cozinha de código %d não foi encontrada", cozinhaId)));
         restaurante.setCozinha(cozinha);
         return restauranteRepository.save(restaurante);
+    }
+
+    public Endereco getEnderecoViaCEP(Restaurante restaurante) {
+        EnderecoFeignDTO enderecoViaCEP = enderecoFeign.getEnderecoViaCEP(restaurante.getEndereco().getCep());
+        Endereco endereco = enderecoViaCEP.convertToEnderecoEntity();
+        return endereco;
     }
 
     public Restaurante buscarPor(Long id) {
