@@ -3,6 +3,11 @@ SET foreign_key_checks = 0; -- Desabilita validação de foreign key
 DELETE FROM cidade;
 DELETE FROM cozinha;
 DELETE FROM estado;
+DELETE FROM restaurante;
+DELETE FROM forma_pagamento;
+DELETE FROM permissao;
+DELETE FROM restaurante_forma_pagamento;
+DELETE FROM produto;
 
 SET foreign_key_checks = 1; -- Habilita validação de foreign key
 
