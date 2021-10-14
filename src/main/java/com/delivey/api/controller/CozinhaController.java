@@ -1,6 +1,5 @@
 package com.delivey.api.controller;
 
-import com.delivey.domain.exception.EntidadeEmUsoException;
 import com.delivey.domain.exception.EntidadeNaoEncontradaException;
 import com.delivey.domain.model.Cozinha;
 import com.delivey.domain.service.CozinhaService;
@@ -52,15 +51,9 @@ public class CozinhaController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluir(@PathVariable final Long id) {
-        try {
-            cozinhaService.remover(id);
-            return ResponseEntity.noContent().build();
-        } catch (EntidadeNaoEncontradaException ex) {
-            return ResponseEntity.notFound().build();
-        } catch (EntidadeEmUsoException ex) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void excluir(@PathVariable final Long id) {
+        cozinhaService.remover(id);
     }
 
 }
