@@ -16,6 +16,9 @@ import java.util.List;
 @Service
 public class CozinhaService {
 
+    private static final String MSG_COZINHA_NAO_ENCONTRADA = "Cozinha de código %d não foi encontrada";
+    private static final String MSG_COZINHA_EM_USO = "Cozinha de código %d não pode ser removida, pois está em uso";
+
     private final CozinhaRepository cozinhaRepository;
 
     public List<Cozinha> listar() {
@@ -27,16 +30,16 @@ public class CozinhaService {
     }
 
     public Cozinha buscarPor(Long id) {
-        return cozinhaRepository.findById(id).orElseThrow(() -> new EntidadeNaoEncontradaException(String.format("Cozinha de código %d não foi encontrada", id)));
+        return cozinhaRepository.buscarOuFalhar(id);
     }
 
     public void remover(Long id) {
         try {
             cozinhaRepository.deleteById(id);
         } catch (EmptyResultDataAccessException ex) {
-            throw new EntidadeNaoEncontradaException(String.format("Cozinha de código %d não foi encontrada", id));
+            throw new EntidadeNaoEncontradaException(String.format(MSG_COZINHA_NAO_ENCONTRADA, id));
         } catch (DataIntegrityViolationException ex) {
-            throw new EntidadeEmUsoException(String.format("Cozinha de código %d não pode ser removida, pois está em uso", id));
+            throw new EntidadeEmUsoException(String.format(MSG_COZINHA_EM_USO, id));
         }
     }
 

@@ -15,6 +15,8 @@ import java.util.List;
 @Service
 public class CidadeService {
 
+    private static final String MSG_COZINHA_EM_USO = "Cidade de código %d não foi encontrado";
+
     private final CidadeRepository cidadeRepository;
 
     private final EstadoRepository estadoRepository;
@@ -25,20 +27,20 @@ public class CidadeService {
 
     public Cidade salvar(Cidade cidade) {
         Long estadoId = cidade.getEstado().getId();
-        Estado estado = estadoRepository.findById(estadoId).orElseThrow(() -> new EntidadeNaoEncontradaException(String.format("Estado de código %d não encontrado", estadoId)));
+        Estado estado = estadoRepository.buscarOuFalhar(estadoId);
         cidade.setEstado(estado);
         return cidadeRepository.save(cidade);
     }
 
     public Cidade buscarPor(Long id) {
-        return cidadeRepository.findById(id).orElseThrow(() -> new EntidadeNaoEncontradaException(String.format("Cidade de código %d não foi encontrado", id)));
+        return cidadeRepository.buscarOuFalhar(id);
     }
 
     public void remover(Long id) {
         try {
             cidadeRepository.deleteById(id);
         } catch (EmptyResultDataAccessException ex) {
-            throw new EntidadeNaoEncontradaException(String.format("Cidade de código %d não foi encontrado", id));
+            throw new EntidadeNaoEncontradaException(String.format(MSG_COZINHA_EM_USO, id));
         }
     }
 

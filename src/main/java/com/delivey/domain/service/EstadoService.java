@@ -16,6 +16,9 @@ import java.util.List;
 @Service
 public class EstadoService {
 
+    private static final String MSG_ESTADO_NAO_ENCONTRADO = "Estado de código %d não foi encontrado";
+    private static final String MSG_ESTADO_EM_USO = "Estado de código %d não pode ser removida, pois está em uso";
+
     private final EstadoRepository estadoRepository;
 
     public List<Estado> listar() {
@@ -27,16 +30,16 @@ public class EstadoService {
     }
 
     public Estado buscarPor(Long id) {
-        return estadoRepository.findById(id).orElseThrow(() -> new EntidadeNaoEncontradaException(String.format("Estado de código %d não foi encontrado", id)));
+        return estadoRepository.buscarOuFalhar(id);
     }
 
     public void remover(Long id) {
         try {
             estadoRepository.deleteById(id);
         } catch (EmptyResultDataAccessException ex) {
-            throw new EntidadeNaoEncontradaException(String.format("Estado de código %d não foi encontrado", id));
+            throw new EntidadeNaoEncontradaException(String.format(MSG_ESTADO_NAO_ENCONTRADO, id));
         } catch (DataIntegrityViolationException ex) {
-            throw new EntidadeEmUsoException(String.format("Estado de código %d não pode ser removida, pois está em uso", id));
+            throw new EntidadeEmUsoException(String.format(MSG_ESTADO_EM_USO, id));
         }
     }
 
