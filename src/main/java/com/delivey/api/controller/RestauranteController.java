@@ -1,5 +1,7 @@
 package com.delivey.api.controller;
 
+import com.delivey.domain.exception.EntidadeNaoEncontradaException;
+import com.delivey.domain.exception.NegocioException;
 import com.delivey.domain.model.Endereco;
 import com.delivey.domain.model.Restaurante;
 import com.delivey.domain.service.RestauranteService;
@@ -34,7 +36,11 @@ public class RestauranteController {
     @PostMapping
     public Restaurante adicionar(@RequestBody Restaurante restaurante) {
         getEnderecoViaCEP(restaurante);
-        return restauranteService.salvar(restaurante);
+        try {
+            return restauranteService.salvar(restaurante);
+        } catch (EntidadeNaoEncontradaException ex) {
+            throw new NegocioException(ex.getMessage());
+        }
     }
 
     @PutMapping("/{id}")
@@ -42,7 +48,11 @@ public class RestauranteController {
         Restaurante restaurante = restauranteService.buscarPor(id);
         getEnderecoViaCEP(restauranteInput);
         BeanUtils.copyProperties(restauranteInput, restaurante, "id", "formasDePagamentos", "endereco", "dataCadastro", "produtos");
-        return restauranteService.salvar(restaurante);
+        try {
+            return restauranteService.salvar(restaurante);
+        } catch (EntidadeNaoEncontradaException ex) {
+            throw new NegocioException(ex.getMessage());
+        }
     }
 
     private void getEnderecoViaCEP(Restaurante restauranteInput) {
