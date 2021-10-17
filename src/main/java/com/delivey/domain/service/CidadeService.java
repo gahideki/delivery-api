@@ -15,7 +15,7 @@ import java.util.List;
 @Service
 public class CidadeService {
 
-    private static final String MSG_COZINHA_EM_USO = "Cidade de código %d não foi encontrado";
+    private static final String MSG_CIDADE_NAO_ENCONTRADA = "Cidade de código %d não foi encontrado";
 
     private final CidadeRepository cidadeRepository;
 
@@ -40,7 +40,7 @@ public class CidadeService {
         try {
             cidadeRepository.deleteById(id);
         } catch (EmptyResultDataAccessException ex) {
-            throw new EntidadeNaoEncontradaException(String.format(MSG_COZINHA_EM_USO, id));
+            throw new EntidadeNaoEncontradaException(String.format(MSG_CIDADE_NAO_ENCONTRADA, id));
         }
     }
 

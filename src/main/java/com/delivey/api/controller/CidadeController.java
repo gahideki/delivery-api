@@ -1,12 +1,10 @@
 package com.delivey.api.controller;
 
-import com.delivey.domain.exception.EntidadeNaoEncontradaException;
 import com.delivey.domain.model.Cidade;
 import com.delivey.domain.service.CidadeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,46 +22,27 @@ public class CidadeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cidade> buscar(@PathVariable final Long id) {
-        try {
-            Cidade cidade = cidadeService.buscarPor(id);
-            return ResponseEntity.ok(cidade);
-        } catch (EntidadeNaoEncontradaException ex) {
-            return ResponseEntity.notFound().build();
-        }
+    public Cidade buscar(@PathVariable final Long id) {
+        return cidadeService.buscarPor(id);
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public ResponseEntity<?> adicionar(@RequestBody Cidade cidade) {
-        try {
-            cidade = cidadeService.salvar(cidade);
-            return ResponseEntity.status(HttpStatus.CREATED).body(cidade);
-        } catch (EntidadeNaoEncontradaException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
+    public Cidade adicionar(@RequestBody Cidade cidade) {
+        return cidadeService.salvar(cidade);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> atualizar(@PathVariable final Long id, @RequestBody Cidade cidadeInput) {
-        try {
-            Cidade cidade = cidadeService.buscarPor(id);
-            BeanUtils.copyProperties(cidadeInput, cidade, "id");
-            return ResponseEntity.ok(cidadeService.salvar(cidade));
-        } catch (EntidadeNaoEncontradaException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        } catch (IllegalArgumentException ex) {
-            return ResponseEntity.notFound().build();
-        }
+    public Cidade atualizar(@PathVariable final Long id, @RequestBody Cidade cidadeInput) {
+        Cidade cidade = cidadeService.buscarPor(id);
+        BeanUtils.copyProperties(cidadeInput, cidade, "id");
+        return cidadeService.salvar(cidade);
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluir(@PathVariable final Long id) {
-        try {
-            cidadeService.remover(id);
-            return ResponseEntity.noContent().build();
-        } catch (EntidadeNaoEncontradaException ex) {
-            return ResponseEntity.notFound().build();
-        }
+    public void excluir(@PathVariable final Long id) {
+        cidadeService.remover(id);
     }
 
 }

@@ -5,7 +5,6 @@ import com.delivey.domain.exception.EntidadeNaoEncontradaException;
 import com.delivey.domain.model.Estado;
 import com.delivey.domain.repository.EstadoRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
