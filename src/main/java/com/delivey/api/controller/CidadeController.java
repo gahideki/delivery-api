@@ -1,6 +1,6 @@
 package com.delivey.api.controller;
 
-import com.delivey.domain.exception.EntidadeNaoEncontradaException;
+import com.delivey.domain.exception.EstadoNaoEncontradoException;
 import com.delivey.domain.exception.NegocioException;
 import com.delivey.domain.model.Cidade;
 import com.delivey.domain.service.CidadeService;
@@ -33,8 +33,8 @@ public class CidadeController {
     public Cidade adicionar(@RequestBody Cidade cidade) {
         try {
             return cidadeService.salvar(cidade);
-        } catch (EntidadeNaoEncontradaException ex) {
-            throw new NegocioException(ex.getMessage());
+        } catch (EstadoNaoEncontradoException ex) {
+            throw new NegocioException(ex.getMessage(), ex);
         }
     }
 
@@ -44,8 +44,8 @@ public class CidadeController {
         BeanUtils.copyProperties(cidadeInput, cidade, "id");
         try {
             return cidadeService.salvar(cidade);
-        } catch (EntidadeNaoEncontradaException ex) {
-            throw new NegocioException(ex.getMessage());
+        } catch (EstadoNaoEncontradoException ex) {
+            throw new NegocioException(ex.getMessage(), ex);
         }
     }
 
