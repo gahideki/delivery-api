@@ -1,5 +1,7 @@
 package com.delivey.api.controller;
 
+import com.delivey.domain.exception.EntidadeNaoEncontradaException;
+import com.delivey.domain.exception.NegocioException;
 import com.delivey.domain.model.Cidade;
 import com.delivey.domain.service.CidadeService;
 import lombok.RequiredArgsConstructor;
@@ -29,14 +31,22 @@ public class CidadeController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public Cidade adicionar(@RequestBody Cidade cidade) {
-        return cidadeService.salvar(cidade);
+        try {
+            return cidadeService.salvar(cidade);
+        } catch (EntidadeNaoEncontradaException ex) {
+            throw new NegocioException(ex.getMessage());
+        }
     }
 
     @PutMapping("/{id}")
     public Cidade atualizar(@PathVariable final Long id, @RequestBody Cidade cidadeInput) {
         Cidade cidade = cidadeService.buscarPor(id);
         BeanUtils.copyProperties(cidadeInput, cidade, "id");
-        return cidadeService.salvar(cidade);
+        try {
+            return cidadeService.salvar(cidade);
+        } catch (EntidadeNaoEncontradaException ex) {
+            throw new NegocioException(ex.getMessage());
+        }
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
