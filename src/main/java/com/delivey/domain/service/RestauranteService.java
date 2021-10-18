@@ -1,6 +1,6 @@
 package com.delivey.domain.service;
 
-import com.delivey.domain.exception.EntidadeNaoEncontradaException;
+import com.delivey.domain.exception.RestauranteNaoEncontradoException;
 import com.delivey.domain.model.Cozinha;
 import com.delivey.domain.model.Endereco;
 import com.delivey.domain.model.Restaurante;
@@ -17,8 +17,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class RestauranteService {
-
-    private static final String MSG_RESTAURANTE_NAO_ENCONTRADO = "Restaurante de código %d não foi encontrado";
 
     private final RestauranteRepository restauranteRepository;
 
@@ -51,7 +49,7 @@ public class RestauranteService {
         try {
             restauranteRepository.deleteById(id);
         } catch (EmptyResultDataAccessException ex) {
-            throw new EntidadeNaoEncontradaException(String.format(MSG_RESTAURANTE_NAO_ENCONTRADO, id));
+            throw new RestauranteNaoEncontradoException(id);
         }
     }
 

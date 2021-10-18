@@ -1,7 +1,7 @@
 package com.delivey.domain.service;
 
+import com.delivey.domain.exception.CozinhaNaoEncontradaException;
 import com.delivey.domain.exception.EntidadeEmUsoException;
-import com.delivey.domain.exception.EntidadeNaoEncontradaException;
 import com.delivey.domain.model.Cozinha;
 import com.delivey.domain.repository.CozinhaRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,6 @@ import java.util.List;
 @Service
 public class CozinhaService {
 
-    private static final String MSG_COZINHA_NAO_ENCONTRADA = "Cozinha de código %d não foi encontrada";
     private static final String MSG_COZINHA_EM_USO = "Cozinha de código %d não pode ser removida, pois está em uso";
 
     private final CozinhaRepository cozinhaRepository;
@@ -36,7 +35,7 @@ public class CozinhaService {
         try {
             cozinhaRepository.deleteById(id);
         } catch (EmptyResultDataAccessException ex) {
-            throw new EntidadeNaoEncontradaException(String.format(MSG_COZINHA_NAO_ENCONTRADA, id));
+            throw new CozinhaNaoEncontradaException(id);
         } catch (DataIntegrityViolationException ex) {
             throw new EntidadeEmUsoException(String.format(MSG_COZINHA_EM_USO, id));
         }

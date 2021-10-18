@@ -1,5 +1,6 @@
 package com.delivey.domain.service;
 
+import com.delivey.domain.exception.CidadeNaoEncontradaException;
 import com.delivey.domain.exception.EntidadeNaoEncontradaException;
 import com.delivey.domain.model.Cidade;
 import com.delivey.domain.model.Estado;
@@ -14,8 +15,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class CidadeService {
-
-    private static final String MSG_CIDADE_NAO_ENCONTRADA = "Cidade de código %d não foi encontrado";
 
     private final CidadeRepository cidadeRepository;
 
@@ -40,7 +39,7 @@ public class CidadeService {
         try {
             cidadeRepository.deleteById(id);
         } catch (EmptyResultDataAccessException ex) {
-            throw new EntidadeNaoEncontradaException(String.format(MSG_CIDADE_NAO_ENCONTRADA, id));
+            throw new CidadeNaoEncontradaException(id);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.delivey.api.controller;
 
+import com.delivey.domain.exception.CozinhaNaoEncontradaException;
 import com.delivey.domain.exception.EntidadeNaoEncontradaException;
 import com.delivey.domain.exception.NegocioException;
 import com.delivey.domain.model.Endereco;
@@ -38,7 +39,7 @@ public class RestauranteController {
         getEnderecoViaCEP(restaurante);
         try {
             return restauranteService.salvar(restaurante);
-        } catch (EntidadeNaoEncontradaException ex) {
+        } catch (CozinhaNaoEncontradaException ex) {
             throw new NegocioException(ex.getMessage());
         }
     }
@@ -50,7 +51,7 @@ public class RestauranteController {
         BeanUtils.copyProperties(restauranteInput, restaurante, "id", "formasDePagamentos", "endereco", "dataCadastro", "produtos");
         try {
             return restauranteService.salvar(restaurante);
-        } catch (EntidadeNaoEncontradaException ex) {
+        } catch (CozinhaNaoEncontradaException ex) {
             throw new NegocioException(ex.getMessage());
         }
     }
