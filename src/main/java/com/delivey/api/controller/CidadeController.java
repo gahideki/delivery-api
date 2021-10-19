@@ -1,5 +1,7 @@
 package com.delivey.api.controller;
 
+import com.delivey.api.exceptionhandler.Problema;
+import com.delivey.domain.exception.EntidadeNaoEncontradaException;
 import com.delivey.domain.exception.EstadoNaoEncontradoException;
 import com.delivey.domain.exception.NegocioException;
 import com.delivey.domain.model.Cidade;
@@ -7,8 +9,10 @@ import com.delivey.domain.service.CidadeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -53,6 +57,18 @@ public class CidadeController {
     @DeleteMapping("/{id}")
     public void excluir(@PathVariable final Long id) {
         cidadeService.remover(id);
+    }
+
+    @ExceptionHandler(EntidadeNaoEncontradaException.class)
+    public ResponseEntity<?> tratarEntidadeNaoEncontradaException(EntidadeNaoEncontradaException ex) {
+        Problema problema = Problema.builder().dataHora(LocalDateTime.now()).mensagem(ex.getMessage()).build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problema);
+    }
+
+    @ExceptionHandler(NegocioException.class)
+    public ResponseEntity<?> tratarNegocioException(NegocioException ex) {
+        Problema problema = Problema.builder().dataHora(LocalDateTime.now()).mensagem(ex.getMessage()).build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problema);
     }
 
 }
