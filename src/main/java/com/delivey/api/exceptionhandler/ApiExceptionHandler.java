@@ -1,5 +1,6 @@
 package com.delivey.api.exceptionhandler;
 
+import com.delivey.domain.exception.EntidadeEmUsoException;
 import com.delivey.domain.exception.EntidadeNaoEncontradaException;
 import com.delivey.domain.exception.NegocioException;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,12 @@ public class ApiExceptionHandler {
     public ResponseEntity<?> tratarHttpMediaTypeNotSupportedException() {
         Problema problema = Problema.builder().dataHora(LocalDateTime.now()).mensagem("O tipo de mídia não é aceito").build();
         return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body(problema);
+    }
+
+    @ExceptionHandler(EntidadeEmUsoException.class)
+    public ResponseEntity<?> tratarEntidadeEmUsoException(EntidadeEmUsoException e) {
+        Problema problema = Problema.builder().dataHora(LocalDateTime.now()).mensagem(e.getMessage()).build();
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(problema);
     }
 
 }
