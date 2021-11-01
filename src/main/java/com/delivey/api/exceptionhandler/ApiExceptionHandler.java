@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EntidadeNaoEncontradaException.class)
     public ResponseEntity<?> handleEntidadeNaoEncontradaException(EntidadeNaoEncontradaException ex, WebRequest request) {
-        ProblemaTypeEnum problemaTypeEnum = ProblemaTypeEnum.ENTIDADE_NAO_ENCONTRADA;
+        ProblemaTypeEnum problemaTypeEnum = ProblemaTypeEnum.RECURSO_NAO_ENCONTRADO;
         String detail = ex.getMessage();
         Problema problema = builderProblema(problemaTypeEnum.getStatus(), problemaTypeEnum, detail).build();
         return handleExceptionInternal(ex, problema, new HttpHeaders(), problemaTypeEnum.getStatus(), request);
@@ -56,6 +57,15 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         }
 
         return super.handleTypeMismatch(ex, headers, status, request);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        ProblemaTypeEnum problemType = ProblemaTypeEnum.RECURSO_NAO_ENCONTRADO;
+        String detail = String.format("O recurso '%s' que você tentou acessar é inexistente", ex.getRequestURL());
+        Problema problema = builderProblema(problemType.getStatus(), problemType, detail).build();
+
+        return handleExceptionInternal(ex, problema, headers, problemType.getStatus(), request);
     }
 
     private ResponseEntity<Object> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex, HttpHeaders headers, WebRequest request) {
