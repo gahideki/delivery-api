@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -70,9 +71,9 @@ public class RestauranteController {
     }
 
     @PatchMapping("/{id}")
-    public Restaurante atualizarParcial(@PathVariable final Long id, @RequestBody Map<String, Object> campos) {
+    public Restaurante atualizarParcial(@PathVariable final Long id, @RequestBody Map<String, Object> campos, HttpServletRequest request) {
         Restaurante restaurante = restauranteService.buscarPor(id);
-        ObjectMerger.of(Restaurante.class).mergeRequestBodyToGenericObject(campos, restaurante);
+        ObjectMerger.of(Restaurante.class).mergeRequestBodyToGenericObject(campos, restaurante, request);
         return atualizar(id, restaurante);
     }
 
