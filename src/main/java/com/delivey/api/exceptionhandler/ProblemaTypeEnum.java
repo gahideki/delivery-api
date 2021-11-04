@@ -10,7 +10,8 @@ public enum ProblemaTypeEnum {
     ENTIDADE_EM_USO("/entidade-em-uso", "Entidade em uso", HttpStatus.CONFLICT),
     ERRO_NEGOCIO("/erro-negocio", "Violação de regra de negócio", HttpStatus.BAD_REQUEST),
     PARAMETRO_INVALIDO("/parametro-invalido", "Parâmetro inválido", HttpStatus.BAD_REQUEST),
-    RECURSO_NAO_ENCONTRADO("/recurso-nao-encontrado", "Recurso não encontrado", HttpStatus.NOT_FOUND);
+    RECURSO_NAO_ENCONTRADO("/recurso-nao-encontrado", "Recurso não encontrado", HttpStatus.NOT_FOUND),
+    ERRO_DE_SISTEMA("/erro-de-sistema", "Erro de sistema", HttpStatus.INTERNAL_SERVER_ERROR);
 
     private String title;
     private String uri;

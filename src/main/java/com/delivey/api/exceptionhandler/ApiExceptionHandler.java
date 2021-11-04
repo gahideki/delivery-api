@@ -31,6 +31,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         ProblemaTypeEnum problemaTypeEnum = ProblemaTypeEnum.RECURSO_NAO_ENCONTRADO;
         String detail = ex.getMessage();
         Problema problema = builderProblema(problemaTypeEnum.getStatus(), problemaTypeEnum, detail).build();
+
         return handleExceptionInternal(ex, problema, new HttpHeaders(), problemaTypeEnum.getStatus(), request);
     }
 
@@ -39,6 +40,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         ProblemaTypeEnum problemaTypeEnum = ProblemaTypeEnum.ERRO_NEGOCIO;
         String detail = ex.getMessage();
         Problema problema = builderProblema(problemaTypeEnum.getStatus(), problemaTypeEnum, detail).build();
+
         return handleExceptionInternal(ex, problema, new HttpHeaders(), problemaTypeEnum.getStatus(), request);
     }
 
@@ -47,6 +49,22 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         ProblemaTypeEnum problemaTypeEnum = ProblemaTypeEnum.ENTIDADE_EM_USO;
         String detail = ex.getMessage();
         Problema problema = builderProblema(problemaTypeEnum.getStatus(), problemaTypeEnum, detail).build();
+
+        return handleExceptionInternal(ex, problema, new HttpHeaders(), problemaTypeEnum.getStatus(), request);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleIllegalArgumentException(Exception ex, WebRequest request) {
+        ProblemaTypeEnum problemaTypeEnum = ProblemaTypeEnum.ERRO_DE_SISTEMA;
+        String detail = "Ocorreu um erro interno inesperado no sistema. Tente novamente e se o problema persistir, entre em contato "
+                + "com o administrador do sistema.";
+
+        // Importante o printStackTrace (pelo menos por enquanto, que não estou fazendo logging)
+        // para mostrar a stacktrace no console. Se não fizer isso, não vou ver a stacktrace
+        // de exceptions que seriam importantes durante, especialmente na fase de desenvolvimento
+        ex.printStackTrace();
+        Problema problema = builderProblema(problemaTypeEnum.getStatus(), problemaTypeEnum, detail).build();
+
         return handleExceptionInternal(ex, problema, new HttpHeaders(), problemaTypeEnum.getStatus(), request);
     }
 
@@ -90,6 +108,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         ProblemaTypeEnum problemaTypeEnum = ProblemaTypeEnum.MENSAGEM_INCOMPREENSIVEL;
         String detail = "O corpo da requisição está inválido. Verifique erro de sintaxe";
         Problema problema = builderProblema(problemaTypeEnum.getStatus(), problemaTypeEnum, detail).build();
+
         return handleExceptionInternal(ex, problema, new HttpHeaders(), problemaTypeEnum.getStatus(), request);
     }
 
@@ -99,6 +118,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         String detail = String.format("A propriedade '%s' recebeu o valor '%s' que é de um tipo inválido. " +
                 "Corrija e informe um valor compátivel com o tipo %s", path, ex.getValue(), ex.getTargetType().getSimpleName());
         Problema problema = builderProblema(status, problemaTypeEnum, detail).build();
+
         return handleExceptionInternal(ex, problema, headers, status, request);
     }
 
@@ -108,6 +128,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         ProblemaTypeEnum problemType = ProblemaTypeEnum.MENSAGEM_INCOMPREENSIVEL;
         String detail = String.format("A propriedade '%s' não existe. Corrija ou remova essa propriedade e tente novamente", path);
         Problema problema = builderProblema(problemType.getStatus(), problemType, detail).build();
+
         return handleExceptionInternal(ex, problema, headers, problemType.getStatus(), request);
     }
 
