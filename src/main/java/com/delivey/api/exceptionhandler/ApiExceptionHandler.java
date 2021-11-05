@@ -142,9 +142,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
         if (ObjectUtils.isEmpty(body)) {
-            body = Problema.builder().title(status.getReasonPhrase()).status(status.value()).build();
+            body = Problema.builder().title(status.getReasonPhrase()).status(status.value()).userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL).build();
         } else if (body instanceof String) {
-            body = Problema.builder().title((String) body).status(status.value()).build();
+            body = Problema.builder().title((String) body).status(status.value()).userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL).build();
         }
         return super.handleExceptionInternal(ex, body, headers, status, request);
     }
