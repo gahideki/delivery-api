@@ -11,7 +11,8 @@ public enum ProblemaTypeEnum {
     ERRO_NEGOCIO("/erro-negocio", "Violação de regra de negócio", HttpStatus.BAD_REQUEST),
     PARAMETRO_INVALIDO("/parametro-invalido", "Parâmetro inválido", HttpStatus.BAD_REQUEST),
     RECURSO_NAO_ENCONTRADO("/recurso-nao-encontrado", "Recurso não encontrado", HttpStatus.NOT_FOUND),
-    ERRO_DE_SISTEMA("/erro-de-sistema", "Erro de sistema", HttpStatus.INTERNAL_SERVER_ERROR);
+    ERRO_DE_SISTEMA("/erro-de-sistema", "Erro de sistema", HttpStatus.INTERNAL_SERVER_ERROR),
+    DADOS_INVALIDOS("/dados-invalidos", "Dados inválidos", HttpStatus.BAD_REQUEST);
 
     private String title;
     private String uri;
