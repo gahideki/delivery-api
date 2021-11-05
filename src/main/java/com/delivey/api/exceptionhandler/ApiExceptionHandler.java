@@ -26,6 +26,9 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
+    private static final String MSG_ERRO_GENERICA_USUARIO_FINAL = "Ocorreu um erro interno inesperado no sistema. Tente novamente e se o problema"
+            + " persistir, entre em contato com o administrador do sistema.";
+
     @ExceptionHandler(EntidadeNaoEncontradaException.class)
     public ResponseEntity<?> handleEntidadeNaoEncontradaException(EntidadeNaoEncontradaException ex, WebRequest request) {
         ProblemaTypeEnum problemaTypeEnum = ProblemaTypeEnum.RECURSO_NAO_ENCONTRADO;
@@ -90,7 +93,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         ProblemaTypeEnum problemType = ProblemaTypeEnum.PARAMETRO_INVALIDO;
         String detail = String.format("O parâmetro de URL '%s' recebeu o valor '%s' que é de um tipo inválido. Corrija e informe um valor compatível com o tipo %s",
                                       ex.getName(), ex.getValue(), ex.getRequiredType().getSimpleName());
-        Problema problema = builderProblema(problemType.getStatus(), problemType, detail).build();
+        Problema problema = builderProblema(problemType.getStatus(), problemType, detail).userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL).build();
 
         return handleExceptionInternal(ex, problema, headers, problemType.getStatus(), request);
     }
@@ -117,7 +120,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         ProblemaTypeEnum problemaTypeEnum = ProblemaTypeEnum.MENSAGEM_INCOMPREENSIVEL;
         String detail = String.format("A propriedade '%s' recebeu o valor '%s' que é de um tipo inválido. " +
                 "Corrija e informe um valor compátivel com o tipo %s", path, ex.getValue(), ex.getTargetType().getSimpleName());
-        Problema problema = builderProblema(status, problemaTypeEnum, detail).build();
+        Problema problema = builderProblema(status, problemaTypeEnum, detail).userMessage(MSG_ERRO_GENERICA_USUARIO_FINAL).build();
 
         return handleExceptionInternal(ex, problema, headers, status, request);
     }
