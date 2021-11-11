@@ -1,6 +1,6 @@
 package com.delivey.domain.service;
 
-import com.delivey.domain.exception.EntidadeNaoEncontradaException;
+import com.delivey.domain.exception.RestauranteNaoEncontradoException;
 import com.delivey.domain.model.Cozinha;
 import com.delivey.domain.model.Endereco;
 import com.delivey.domain.model.Restaurante;
@@ -30,7 +30,7 @@ public class RestauranteService {
 
     public Restaurante salvar(Restaurante restaurante) {
         Long cozinhaId = restaurante.getCozinha().getId();
-        Cozinha cozinha = cozinhaRepository.findById(cozinhaId).orElseThrow(() -> new EntidadeNaoEncontradaException(String.format("Cozinha de código %d não foi encontrada", cozinhaId)));
+        Cozinha cozinha = cozinhaRepository.buscarOuFalhar(cozinhaId);
         restaurante.setCozinha(cozinha);
         return restauranteRepository.save(restaurante);
     }
@@ -42,14 +42,14 @@ public class RestauranteService {
     }
 
     public Restaurante buscarPor(Long id) {
-        return restauranteRepository.findById(id).orElseThrow(() -> new EntidadeNaoEncontradaException(String.format("Restaurante de código %d não foi encontrado", id)));
+        return restauranteRepository.buscarOuFalhar(id);
     }
 
     public void remover(Long id) {
         try {
             restauranteRepository.deleteById(id);
         } catch (EmptyResultDataAccessException ex) {
-            throw new EntidadeNaoEncontradaException(String.format("Restaurante de código %d não foi encontrado", id));
+            throw new RestauranteNaoEncontradoException(id);
         }
     }
 

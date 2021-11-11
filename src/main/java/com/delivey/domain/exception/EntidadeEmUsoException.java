@@ -1,6 +1,6 @@
 package com.delivey.domain.exception;
 
-public class EntidadeEmUsoException extends RuntimeException {
+public class EntidadeEmUsoException extends NegocioException {
 
     public EntidadeEmUsoException(String mensagem) {
         super(mensagem);
