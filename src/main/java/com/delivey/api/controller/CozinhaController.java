@@ -7,6 +7,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -28,7 +29,7 @@ public class CozinhaController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public Cozinha adicionar(@RequestBody Cozinha cozinha) {
+    public Cozinha adicionar(@Valid @RequestBody Cozinha cozinha) {
         return cozinhaService.salvar(cozinha);
     }
 
