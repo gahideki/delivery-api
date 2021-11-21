@@ -44,7 +44,7 @@ public class Restaurante {
 
     @Valid
     @ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
-    @NotNull(groups = Groups.CozinhaId.class)
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "cozinha_id", nullable = false)
     private Cozinha cozinha;

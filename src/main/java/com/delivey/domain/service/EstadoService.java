@@ -1,7 +1,6 @@
 package com.delivey.domain.service;
 
 import com.delivey.domain.exception.EntidadeEmUsoException;
-import com.delivey.domain.exception.EntidadeNaoEncontradaException;
 import com.delivey.domain.exception.EstadoNaoEncontradoException;
 import com.delivey.domain.model.Estado;
 import com.delivey.domain.repository.EstadoRepository;

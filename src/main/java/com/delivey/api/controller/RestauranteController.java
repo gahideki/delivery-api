@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.ObjectUtils;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,7 +46,7 @@ public class RestauranteController {
     }
 
     @PutMapping("/{id}")
-    public Restaurante atualizar(@PathVariable final Long id, @RequestBody Restaurante restauranteInput) {
+    public Restaurante atualizar(@PathVariable final Long id, @Valid @RequestBody Restaurante restauranteInput) {
         Restaurante restaurante = restauranteService.buscarPor(id);
         getEnderecoViaCEP(restauranteInput);
         BeanUtils.copyProperties(restauranteInput, restaurante, "id", "formasDePagamentos", "endereco", "dataCadastro", "produtos");

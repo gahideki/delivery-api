@@ -1,7 +1,5 @@
 package com.delivey.api.controller;
 
-import com.delivey.api.exceptionhandler.Problema;
-import com.delivey.domain.exception.EntidadeNaoEncontradaException;
 import com.delivey.domain.exception.EstadoNaoEncontradoException;
 import com.delivey.domain.exception.NegocioException;
 import com.delivey.domain.model.Cidade;
@@ -9,10 +7,9 @@ import com.delivey.domain.service.CidadeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
+import javax.validation.Valid;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -34,7 +31,7 @@ public class CidadeController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public Cidade adicionar(@RequestBody Cidade cidade) {
+    public Cidade adicionar(@Valid @RequestBody Cidade cidade) {
         try {
             return cidadeService.salvar(cidade);
         } catch (EstadoNaoEncontradoException ex) {
@@ -43,7 +40,7 @@ public class CidadeController {
     }
 
     @PutMapping("/{id}")
-    public Cidade atualizar(@PathVariable final Long id, @RequestBody Cidade cidadeInput) {
+    public Cidade atualizar(@PathVariable final Long id, @Valid @RequestBody Cidade cidadeInput) {
         Cidade cidade = cidadeService.buscarPor(id);
         BeanUtils.copyProperties(cidadeInput, cidade, "id");
         try {
