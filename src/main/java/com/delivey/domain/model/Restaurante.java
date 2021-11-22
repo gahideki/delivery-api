@@ -1,5 +1,6 @@
 package com.delivey.domain.model;
 
+import com.delivey.core.validation.TaxaFrete;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -39,7 +40,7 @@ public class Restaurante {
     private String nome;
 
     @NotNull
-    @PositiveOrZero
+    @TaxaFrete
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 
