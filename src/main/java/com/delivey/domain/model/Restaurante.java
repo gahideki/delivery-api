@@ -1,5 +1,6 @@
 package com.delivey.domain.model;
 
+import com.delivey.core.validation.Multiplo;
 import com.delivey.core.validation.TaxaFrete;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
@@ -41,6 +42,7 @@ public class Restaurante {
 
     @NotNull
     @TaxaFrete
+    @Multiplo(numero = 5)
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 
