@@ -2,6 +2,7 @@ package com.delivey.api.controller;
 
 import com.delivey.domain.exception.CozinhaNaoEncontradaException;
 import com.delivey.domain.exception.NegocioException;
+import com.delivey.domain.exception.ValidacaoException;
 import com.delivey.domain.model.Endereco;
 import com.delivey.domain.model.Restaurante;
 import com.delivey.domain.service.RestauranteService;
@@ -10,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.ObjectUtils;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +26,8 @@ import java.util.Map;
 public class RestauranteController {
 
     private final RestauranteService restauranteService;
+
+    private final SmartValidator validator;
 
     @GetMapping
     public List<Restaurante> listar() {
@@ -48,7 +53,7 @@ public class RestauranteController {
     @PutMapping("/{id}")
     public Restaurante atualizar(@PathVariable final Long id, @Valid @RequestBody Restaurante restauranteInput) {
         Restaurante restaurante = restauranteService.buscarPor(id);
-        getEnderecoViaCEP(restauranteInput);
+        //getEnderecoViaCEP(restauranteInput);
         BeanUtils.copyProperties(restauranteInput, restaurante, "id", "formasDePagamentos", "endereco", "dataCadastro", "produtos");
         try {
             return restauranteService.salvar(restaurante);
@@ -74,7 +79,16 @@ public class RestauranteController {
     public Restaurante atualizarParcial(@PathVariable final Long id, @RequestBody Map<String, Object> campos, HttpServletRequest request) {
         Restaurante restaurante = restauranteService.buscarPor(id);
         ObjectMerger.of(Restaurante.class).mergeRequestBodyToGenericObject(campos, restaurante, request);
+        validate(restaurante, "restaurante");
         return atualizar(id, restaurante);
+    }
+
+    private void validate(Restaurante restaurante, String objectName) {
+        BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(restaurante, objectName);
+        validator.validate(restaurante, bindingResult);
+
+        if (bindingResult.hasErrors())
+            throw new ValidacaoException(bindingResult);
     }
 
 }

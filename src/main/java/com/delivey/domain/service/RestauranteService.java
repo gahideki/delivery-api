@@ -1,5 +1,6 @@
 package com.delivey.domain.service;
 
+import com.delivey.domain.exception.NegocioException;
 import com.delivey.domain.exception.RestauranteNaoEncontradoException;
 import com.delivey.domain.model.Cozinha;
 import com.delivey.domain.model.Endereco;
@@ -36,9 +37,13 @@ public class RestauranteService {
     }
 
     public Endereco getEnderecoViaCEP(Restaurante restaurante) {
-        EnderecoFeignDTO enderecoViaCEP = enderecoFeign.getEnderecoViaCEP(restaurante.getEndereco().getCep());
-        Endereco endereco = enderecoViaCEP.convertToEnderecoEntity();
-        return endereco;
+        try {
+            EnderecoFeignDTO enderecoViaCEP = enderecoFeign.getEnderecoViaCEP(restaurante.getEndereco().getCep());
+            Endereco endereco = enderecoViaCEP.convertToEnderecoEntity();
+            return endereco;
+        } catch (RuntimeException ex) {
+            throw new NegocioException("Erro encontrado no cep. Entre em contato com o administrador do sistema");
+        }
     }
 
     public Restaurante buscarPor(Long id) {
